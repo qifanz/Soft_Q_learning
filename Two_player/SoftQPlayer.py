@@ -4,8 +4,8 @@ import math
 
 
 class SoftQPlayer:
-    epsilon = 0.8
-    beta = 20
+    epsilon = 0.9
+    beta = 5
     def __init__(self):
         pass
 

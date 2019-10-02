@@ -59,7 +59,7 @@ class GridWorld:
         if self.pos_box == self.pos_player and action_player == action_cst.PICKUP:
             self.box_picked = True
 
-        return action_opponent, action_player
+        return action_player, action_opponent
 
     def update_pos(self, action, previous_pos_op, previous_pos_self, current_pos_op):
         new_x_self = previous_pos_self[0] + action[0]
@@ -80,7 +80,7 @@ class GridWorld:
 
     def play(self, print_board = False):
         n_moves = 0
-        while not self.box_picked and n_moves < 100:
+        while not self.box_picked:
             if print_board:
                 self.print_board()
             previous_state = (self.pos_opponent, self.pos_player)

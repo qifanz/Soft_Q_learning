@@ -3,7 +3,7 @@ import math
 
 class Q:
     def __init__(self):
-        self.gamma = 0.9
+        self.gamma = 0.95
         self.alpha = 0.5
         self.values = {}  # state -> pair of action -> value
 
@@ -29,7 +29,7 @@ class Q:
         sum = 0
         for action_op in possible_actions_opponent:
             sum += (game.opponent.get_reference(game.get_state(), action_op, len(possible_actions_opponent)) * math.exp(
-                game.opponent.beta * self.values.get(game.get_state(), {}).get((action_op, action),0)))
+                game.opponent.beta * self.values.get(game.get_state(), {}).get((action, action_op),0)))
         return math.log(sum) / game.opponent.beta
 
     def get_Q_opponent(self, game, action):
