@@ -1,5 +1,4 @@
 import action_cst
-import global_vars
 
 
 class GridWorld:

@@ -1,6 +1,6 @@
-import gridworld
 import random
 import numpy as np
+from Single import gridworld
 import action_cst
 import math
 
