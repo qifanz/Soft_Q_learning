@@ -5,7 +5,7 @@ import math
 
 class SoftQOpponent:
     epsilon = 0.8
-    beta = 20
+    beta = -20
 
     def __init__(self):
         pass

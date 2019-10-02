@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 
-n_experience = 10
+n_experience = 5
 n_episode_per_exp = 15000
 cum_reward = np.zeros(n_episode_per_exp)
 for j in range(n_experience):
@@ -15,7 +15,7 @@ for j in range(n_experience):
     player = Two_player.SoftQPlayer.SoftQPlayer()
     op = Two_player.SoftQOpponent.SoftQOpponent()
     for i in range(n_episode_per_exp):
-        game = Two_player.GridWorld.GridWorld(op, player, Q)
+        game = Two_player.GridWorld.GridWorld(op, player, Q, i)
         cum_reward[i] += game.play()
 
     print('Finished ',str(j), ' experiences')

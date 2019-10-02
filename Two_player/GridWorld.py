@@ -4,7 +4,7 @@ import action_cst
 class GridWorld:
 
 
-    def __init__(self, p1, p2, Q, n_row=5, n_col=6):
+    def __init__(self, p1, p2, Q, episode, n_row=5, n_col=6):
         self.opponent = p1
         self.player = p2
         self.n_col = n_col
@@ -12,9 +12,10 @@ class GridWorld:
         self.Q = Q
         self.pos_box = (1, 5)
         self.box_picked = False
-        self.pos_opponent = (0, 1)
+        self.pos_opponent = (1, 5)
         self.pos_player = (0, 0)
         self.cumulative_reward = 0
+        self.episode = episode
 
     def get_state(self):
         return self.pos_opponent, self.pos_player
@@ -78,12 +79,14 @@ class GridWorld:
         return reward
 
     def play(self, print_board = False):
-        while not self.box_picked:
+        n_moves = 0
+        while not self.box_picked and n_moves < 100:
             if print_board:
                 self.print_board()
             previous_state = (self.pos_opponent, self.pos_player)
             actions = self.move()
             self.Q.update(self.reward(), previous_state,actions, self)
+            n_moves+=1
         #print('Episode cumulative reward: ', str(self.cumulative_reward))
         return self.cumulative_reward
 

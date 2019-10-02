@@ -6,7 +6,7 @@ pos_box = (1, 5)
 
 
 def ref_player(state, action, len_actions):
-    if state == pos_box:
+    '''if state == pos_box:
         if action == action_cst.PICKUP:
             return 0.96
         else:
@@ -34,7 +34,7 @@ def ref_player(state, action, len_actions):
         if action == action_cst.LEFT:
             return 0.96
         else:
-            return 0.04 / (len_actions - 1)
+            return 0.04 / (len_actions - 1)'''
 
     return 1 / len_actions
 
