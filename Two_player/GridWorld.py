@@ -12,39 +12,18 @@ class GridWorld:
         self.Q = Q
         self.pos_box = (1, 5)
         self.box_picked = False
-        self.pos_opponent = (1, 5)
+        self.pos_opponent = (1, 1)
         self.pos_player = (0, 0)
         self.cumulative_reward = 0
         self.episode = episode
+        self.bellman_error = 0
 
     def get_state(self):
         return self.pos_opponent, self.pos_player
 
-    def possible_moves(self, player="player"):
-        actions = [action_cst.DOWN, action_cst.LEFT, action_cst.RIGHT, action_cst.UP]
-
-        if player == "player":
-            pos_cur = self.pos_player
-        else:
-            pos_cur = self.pos_opponent
-
-        if pos_cur[1] == 0:
-            actions.remove(action_cst.LEFT)
-        if pos_cur[1] >= self.n_col - 1:
-            actions.remove(action_cst.RIGHT)
-        if pos_cur[0] == 0:
-            actions.remove(action_cst.UP)
-        if pos_cur[0] >= self.n_row - 1:
-            actions.remove(action_cst.DOWN)
-
-        if player == "player":
-            if pos_cur == self.pos_box:
-                actions.append(action_cst.PICKUP)
-        return actions
-
     def move(self):
-        action_player = self.player.choose_move(self)
-        action_opponent = self.opponent.choose_move(self)
+        action_player = self.player.choose_move(self.get_state(), self.Q)
+        action_opponent = self.opponent.choose_move(self.get_state(), self.Q)
 
         previous_state = (self.pos_opponent, self.pos_player)
 
@@ -85,10 +64,10 @@ class GridWorld:
                 self.print_board()
             previous_state = (self.pos_opponent, self.pos_player)
             actions = self.move()
-            self.Q.update(self.reward(), previous_state,actions, self)
+            self.bellman_error += self.Q.update(self.reward(), previous_state,actions, self.get_state())
             n_moves+=1
         #print('Episode cumulative reward: ', str(self.cumulative_reward))
-        return self.cumulative_reward
+        return self.cumulative_reward, self.bellman_error / n_moves
 
     def print_board(self):
         print('************************')

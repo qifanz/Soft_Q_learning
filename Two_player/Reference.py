@@ -39,5 +39,6 @@ def ref_player(state, action, len_actions):
     return 1 / len_actions
 
 
+
 def ref_opponent(state, action, len_actions):
     return 1 / len_actions
