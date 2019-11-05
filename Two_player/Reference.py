@@ -1,10 +1,3 @@
-import action_cst
-
-row_box = 1
-col_box = 5
-pos_box = (1, 5)
-
-
 def ref_player(state, action, len_actions):
     '''if state == pos_box:
         if action == action_cst.PICKUP:
