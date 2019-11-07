@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 
 for beta_player in [20]:
     for beta_op in [-5]:
-        n_experience = 20
-        n_episode_per_exp = 50000
+        n_experience = 10
+        n_episode_per_exp = 15000
         cum_reward = np.zeros(n_episode_per_exp)
-        bellman_error = np.zeros(n_episode_per_exp)
+        beta_estimation = np.zeros(n_episode_per_exp)
         for j in range(n_experience):
-            player = Two_player.SoftQPlayer.SoftQPlayer(beta_player)
+            player = Two_player.SoftQPlayer.SoftQPlayer(beta_player, True)
             op = Two_player.SoftQOpponent.SoftQOpponent(beta_op)
             Q = Two_player.Q.Q(player, op)
 
@@ -22,7 +22,7 @@ for beta_player in [20]:
                 game = Two_player.GridWorld.GridWorld(op, player, Q, i)
                 reward, error = game.play()
                 cum_reward[i] += reward
-                bellman_error[i] += error
+                beta_estimation[i] += error
 
             print('Finished ',str(j+1), ' experiences.')
             '''for i in range(10):
@@ -32,7 +32,7 @@ for beta_player in [20]:
                 print('********************************************')
             '''
         cum_reward /= n_experience
-        bellman_error/= n_experience
+        beta_estimation/= n_experience
 
         smooth_factor = 20
         for i in range(0, n_episode_per_exp, smooth_factor):
@@ -43,9 +43,16 @@ for beta_player in [20]:
         #np.save('reward.npy',cum_reward)
 
         plt.plot(cum_reward)
-       # plt.ylim((-2, 1))
         title = 'Cumulative Reward beta_pl = ' +str(beta_player) +' beta_op = '+str(beta_op)
         plt.title(title)
         plt.xlabel('Episodes')
         plt.ylabel('Cumulative reward')
+
+        plt.plot(beta_estimation)
+        title = 'Beta estimation'
+        plt.title(title)
+        plt.xlabel('Episodes')
+        plt.ylabel('Estimated beta')
         plt.show()
+
+

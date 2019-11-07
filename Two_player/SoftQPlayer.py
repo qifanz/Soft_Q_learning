@@ -2,11 +2,21 @@ import random
 import Two_player.Reference as ref
 import math
 import Two_player.util as util
+from Two_player.beta_estimator import beta_estimator
 
 class SoftQPlayer:
-    def __init__(self, beta):
+    def __init__(self, beta, use_estimation = False):
         self.epsilon = 0.9
         self.beta = beta
+        self.use_estimation = use_estimation
+        if use_estimation:
+            self.beta_estimator = beta_estimator(-1, 0.01)
+
+    def perform_estimation(self, history, Q):
+        self.beta_estimator.stochastic_gradient_descent(history, Q)
+
+    def get_beta_estimation(self):
+        return self.beta_estimator.get_estimation()
 
     def choose_move(self, state, Q):
         possible_actions = util.possible_moves(state)
@@ -50,7 +60,7 @@ class SoftQPlayer:
                 possibility = self.get_reference(state, action, len(possible_actions))
             else:
                 possibility = self.get_reference(state, action, len(possible_actions)) * math.exp(
-                    self.beta * Q.get_Q_player(state, action))
+                    self.beta * Q.get_Q_player(state, action, self.use_estimation, self.beta_estimator.get_estimation()))
             if len(possibility_array) == 0:
                 possibility_array.append(possibility)
             else:

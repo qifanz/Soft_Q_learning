@@ -23,19 +23,24 @@ class Q:
         possible_actions_player = util.possible_moves(new_state)
         sum = 0
         for action in possible_actions_player:
-            Q_player = self.get_Q_player(new_state, action)
+            Q_player = self.get_Q_player(new_state, action, self.player.use_estimation,
+                                         self.player.get_beta_estimation())
             sum += (self.player.get_reference(new_state, action, len(possible_actions_player)) * math.exp(
                 self.player.beta * Q_player))
 
         return math.log(sum) / self.player.beta
 
-    def get_Q_player(self, state, action):
+    def get_Q_player(self, state, action, use_estimation, beta_estimation):
         possible_actions_opponent = util.possible_moves(state, player='opponent')
         sum = 0
+        if use_estimation:
+            beta = beta_estimation
+        else:
+            beta = self.opponent.beta
         for action_op in possible_actions_opponent:
             sum += (self.opponent.get_reference(state, action_op, len(possible_actions_opponent)) * math.exp(
-                self.opponent.beta * self.values.get(state, {}).get((action, action_op), 0)))
-        return math.log(sum) / self.opponent.beta
+                beta * self.values.get(state, {}).get((action, action_op), 0)))
+        return math.log(sum) / beta
 
     def get_Q_opponent(self, state, action):
         possible_actions_player = util.possible_moves(state, player='player')

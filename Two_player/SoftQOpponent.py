@@ -3,7 +3,6 @@ import Two_player.Reference as ref
 import math
 import Two_player.util as util
 
-
 class SoftQOpponent:
     def __init__(self, beta):
         self.epsilon = 0.9

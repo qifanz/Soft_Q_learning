@@ -3,14 +3,13 @@ import action_cst
 
 class GridWorld:
 
-
-    def __init__(self, p1, p2, Q, episode, n_row=8, n_col=8):
+    def __init__(self, p1, p2, Q, episode, n_row=5, n_col=6):
         self.opponent = p1
         self.player = p2
         self.n_col = n_col
         self.n_row = n_row
         self.Q = Q
-        self.pos_box = (3, 7)
+        self.pos_box = (1, 5)
         self.box_picked = False
         self.pos_opponent = (1, 1)
         self.pos_player = (0, 0)
@@ -57,17 +56,24 @@ class GridWorld:
         self.cumulative_reward += reward
         return reward
 
-    def play(self, print_board = False):
+    def play(self, print_board=False):
         n_moves = 0
+        history = []
         while not self.box_picked:
+
             if print_board:
                 self.print_board()
             previous_state = (self.pos_opponent, self.pos_player)
             actions = self.move()
-            self.bellman_error += self.Q.update(self.reward(), previous_state,actions, self.get_state())
-            n_moves+=1
-        #print('Episode cumulative reward: ', str(self.cumulative_reward))
-        return self.cumulative_reward, self.bellman_error / n_moves
+
+            if n_moves < 20:
+                history.append((previous_state, actions[1]))
+            elif n_moves == 20 and self.player.use_estimation:
+                self.player.perform_estimation(history, self.Q)
+
+            self.bellman_error += self.Q.update(self.reward(), previous_state, actions, self.get_state())
+            n_moves += 1
+        return self.cumulative_reward, self.player.get_beta_estimation()
 
     def print_board(self):
         print('************************')
