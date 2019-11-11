@@ -5,7 +5,7 @@ import Two_player.util as util
 
 class SoftQOpponent:
     def __init__(self, beta):
-        self.epsilon = 0.9
+        self.epsilon = 0.95
         self.beta = beta
 
     def choose_move(self, state, Q):

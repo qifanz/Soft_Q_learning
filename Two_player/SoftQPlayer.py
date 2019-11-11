@@ -10,7 +10,7 @@ class SoftQPlayer:
         self.beta = beta
         self.use_estimation = use_estimation
         if use_estimation:
-            self.beta_estimator = beta_estimator(-1, 0.01)
+            self.beta_estimator = beta_estimator(-15, 0.005)
 
     def perform_estimation(self, history, Q):
         self.beta_estimator.stochastic_gradient_descent(history, Q)

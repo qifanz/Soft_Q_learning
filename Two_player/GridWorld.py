@@ -66,10 +66,12 @@ class GridWorld:
             previous_state = (self.pos_opponent, self.pos_player)
             actions = self.move()
 
-            if n_moves < 20:
-                history.append((previous_state, actions[1]))
-            elif n_moves == 20 and self.player.use_estimation:
-                self.player.perform_estimation(history, self.Q)
+            if self.player.use_estimation:
+                if n_moves > 10:
+                    history.append((previous_state, actions[1]))
+                    if n_moves % 1 == 0:
+                        self.player.perform_estimation(history, self.Q)
+                        history = []
 
             self.bellman_error += self.Q.update(self.reward(), previous_state, actions, self.get_state())
             n_moves += 1

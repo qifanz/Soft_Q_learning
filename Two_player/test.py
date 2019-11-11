@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 for beta_player in [20]:
-    for beta_op in [-5]:
-        n_experience = 10
-        n_episode_per_exp = 15000
+    for beta_op in [-10]:
+        n_experience = 5
+        n_episode_per_exp = 20000
         cum_reward = np.zeros(n_episode_per_exp)
         beta_estimation = np.zeros(n_episode_per_exp)
         for j in range(n_experience):
@@ -41,13 +41,15 @@ for beta_player in [20]:
         print('beta opponent  = ', beta_op, ' beta player = ', beta_player, ' equilibrium reward = ',
               np.mean(cum_reward[n_episode_per_exp- 500:n_episode_per_exp-1]))
         #np.save('reward.npy',cum_reward)
+        '''
 
-        plt.plot(cum_reward)
+        
         title = 'Cumulative Reward beta_pl = ' +str(beta_player) +' beta_op = '+str(beta_op)
         plt.title(title)
         plt.xlabel('Episodes')
         plt.ylabel('Cumulative reward')
-
+        '''
+        plt.plot(cum_reward)
         plt.plot(beta_estimation)
         title = 'Beta estimation'
         plt.title(title)
